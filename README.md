@@ -68,7 +68,6 @@ src/main/java/com/teashop/
 - phone: 手机号
 - email: 邮箱
 - address: 地址
-- role: 角色（USER/ADMIN）
 - createTime: 创建时间
 - updateTime: 更新时间
 
