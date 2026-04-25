@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teashop.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.teashop.common.entity.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="address" column="address"/>
+        <result property="role" column="role"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="findById" resultMap="UserResultMap">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <select id="findByUsername" resultMap="UserResultMap">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT * FROM users ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" parameterType="com.teashop.common.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (username, password, phone, email, address, role, create_time, update_time)
+        VALUES (#{username}, #{password}, #{phone}, #{email}, #{address}, #{role}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="com.teashop.common.entity.User">
+        UPDATE users
+        SET phone = #{phone},
+            email = #{email},
+            address = #{address},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+    <select id="existsByUsername" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM users WHERE username = #{username}
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM users
+    </select>
+
+</mapper>

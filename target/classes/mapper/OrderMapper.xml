@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teashop.mapper.OrderMapper">
+
+    <resultMap id="OrderResultMap" type="com.teashop.common.entity.Order">
+        <id property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="status" column="status"/>
+        <result property="shippingAddress" column="shipping_address"/>
+        <result property="shippingPhone" column="shipping_phone"/>
+        <result property="shippingName" column="shipping_name"/>
+        <result property="freight" column="freight"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="findById" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE id = #{id}
+    </select>
+
+    <select id="findByOrderNo" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE order_no = #{orderNo}
+    </select>
+
+    <select id="findByUser" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE user_id = #{userId} ORDER BY create_time DESC
+    </select>
+
+    <select id="findByUserWithPage" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE user_id = #{userId} ORDER BY create_time DESC LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="findByStatus" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE status = #{status} ORDER BY create_time DESC
+    </select>
+
+    <select id="findAll" resultMap="OrderResultMap">
+        SELECT * FROM orders ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" parameterType="com.teashop.common.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (order_no, user_id, total_amount, status, shipping_address, shipping_phone, shipping_name, freight, create_time, update_time)
+        VALUES (#{orderNo}, #{userId}, #{totalAmount}, #{status}, #{shippingAddress}, #{shippingPhone}, #{shippingName}, #{freight}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="com.teashop.common.entity.Order">
+        UPDATE orders
+        SET order_no = #{orderNo},
+            user_id = #{userId},
+            total_amount = #{totalAmount},
+            status = #{status},
+            shipping_address = #{shippingAddress},
+            shipping_phone = #{shippingPhone},
+            shipping_name = #{shippingName},
+            freight = #{freight},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE orders
+        SET status = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM orders WHERE id = #{id}
+    </delete>
+
+    <select id="countByUser" resultType="int">
+        SELECT COUNT(*) FROM orders WHERE user_id = #{userId}
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM orders
+    </select>
+
+</mapper>

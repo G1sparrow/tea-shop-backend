@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teashop.mapper.AdminMapper">
+
+    <resultMap id="AdminResultMap" type="com.teashop.common.entity.Admin">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="name" property="name" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="findById" resultMap="AdminResultMap">
+        SELECT * FROM admins WHERE id = #{id}
+    </select>
+
+    <select id="findByUsername" resultMap="AdminResultMap">
+        SELECT * FROM admins WHERE username = #{username}
+    </select>
+
+    <select id="findAll" resultMap="AdminResultMap">
+        SELECT * FROM admins
+    </select>
+
+    <insert id="insert" parameterType="com.teashop.common.entity.Admin">
+        INSERT INTO admins (username, password, phone, email, name) 
+        VALUES (#{username}, #{password}, #{phone}, #{email}, #{name})
+    </insert>
+
+    <update id="update" parameterType="com.teashop.common.entity.Admin">
+        UPDATE admins 
+        SET 
+            phone = #{phone},
+            email = #{email},
+            name = #{name},
+            update_time = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM admins WHERE id = #{id}
+    </delete>
+
+</mapper>

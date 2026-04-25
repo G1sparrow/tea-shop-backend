@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teashop.mapper.TeaTracingMapper">
+
+    <resultMap id="TeaTracingResultMap" type="com.teashop.common.entity.TeaTracing">
+        <id column="id" property="id" />
+        <result column="product_id" property="product.id" />
+        <result column="origin" property="origin" />
+        <result column="harvest_time" property="harvestTime" />
+        <result column="process" property="process" />
+        <result column="tea_variety" property="teaVariety" />
+        <result column="quality_report" property="qualityReport" />
+        <result column="茶园_images" property="茶园Images" />
+        <result column="growth_video" property="growthVideo" />
+        <result column="qr_code" property="qrCode" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="findById" resultMap="TeaTracingResultMap">
+        SELECT * FROM tea_tracing WHERE id = #{id}
+    </select>
+
+    <select id="findByProductId" resultMap="TeaTracingResultMap">
+        SELECT * FROM tea_tracing WHERE product_id = #{productId}
+    </select>
+
+    <insert id="insert" parameterType="com.teashop.common.entity.TeaTracing">
+        INSERT INTO tea_tracing (
+            product_id, origin, harvest_time, process, tea_variety, 
+            quality_report, 茶园_images, growth_video, qr_code
+        ) VALUES (
+            #{product.id}, #{origin}, #{harvestTime}, #{process}, #{teaVariety}, 
+            #{qualityReport}, #{茶园Images}, #{growthVideo}, #{qrCode}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.teashop.common.entity.TeaTracing">
+        UPDATE tea_tracing SET 
+            origin = #{origin},
+            harvest_time = #{harvestTime},
+            process = #{process},
+            tea_variety = #{teaVariety},
+            quality_report = #{qualityReport},
+            茶园_images = #{茶园Images},
+            growth_video = #{growthVideo},
+            qr_code = #{qrCode},
+            update_time = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tea_tracing WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teashop.mapper.TeaSetMapper">
+
+    <resultMap id="TeaSetResultMap" type="com.teashop.common.entity.TeaSet">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="price" property="price" />
+        <result column="material" property="material" />
+        <result column="category" property="category" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <select id="findTeaSets" resultMap="TeaSetResultMap">
+        SELECT * FROM tea_sets
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') OR id = #{keyword})
+            </if>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+        </where>
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countTeaSets" resultType="int">
+        SELECT COUNT(*)
+        FROM tea_sets
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') OR id = #{keyword})
+            </if>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="TeaSetResultMap">
+        SELECT * FROM tea_sets WHERE id = #{id}
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tea_sets (name, description, price, material, category, status, created_at, updated_at)
+        VALUES (#{name}, #{description}, #{price}, #{material}, #{category}, #{status}, NOW(), NOW())
+    </insert>
+
+    <update id="update">
+        UPDATE tea_sets SET
+            name = #{name},
+            description = #{description},
+            price = #{price},
+            material = #{material},
+            category = #{category},
+            status = #{status},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tea_sets WHERE id = #{id}
+    </delete>
+
+    <delete id="batchDeleteByIds">
+        DELETE FROM tea_sets WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

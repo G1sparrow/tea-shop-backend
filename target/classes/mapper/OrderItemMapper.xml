@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teashop.mapper.OrderItemMapper">
+
+    <resultMap id="OrderItemResultMap" type="com.teashop.common.entity.OrderItem">
+        <id property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="price" column="price"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="findById" resultMap="OrderItemResultMap">
+        SELECT * FROM order_items WHERE id = #{id}
+    </select>
+
+    <select id="findByOrderId" resultMap="OrderItemResultMap">
+        SELECT * FROM order_items WHERE order_id = #{orderId} ORDER BY create_time DESC
+    </select>
+
+    <select id="findByProductId" resultMap="OrderItemResultMap">
+        SELECT * FROM order_items WHERE product_id = #{productId} ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" parameterType="com.teashop.common.entity.OrderItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_items (order_id, product_id, quantity, price, create_time)
+        VALUES (#{order.id}, #{product.id}, #{quantity}, #{price}, NOW())
+    </insert>
+
+    <update id="update" parameterType="com.teashop.common.entity.OrderItem">
+        UPDATE order_items
+        SET order_id = #{order.id},
+            product_id = #{product.id},
+            quantity = #{quantity},
+            price = #{price}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM order_items WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByOrderId">
+        DELETE FROM order_items WHERE order_id = #{orderId}
+    </delete>
+
+</mapper>
