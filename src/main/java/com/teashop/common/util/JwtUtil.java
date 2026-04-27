@@ -13,8 +13,13 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // ✅ 自动生成 HS512 安全密钥（最佳实践）
-    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    //生成密钥
+    @Autowired
+    private Environment env;
+    private SecretKey getSecretKey() {
+        String secret = env.getProperty("jwt.secret", "teashopSecretKey");
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     // 从token中获取用户名
     public String extractUsername(String token) {
