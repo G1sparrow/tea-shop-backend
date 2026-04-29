@@ -35,12 +35,14 @@ public class SecurityConfig {
                 // 允许用户注册和登录
                 .requestMatchers("/api/user/register").permitAll()
                 .requestMatchers("/api/user/login").permitAll()
-                .requestMatchers("/api/user/me").permitAll() // 允许通过token获取用户信息
+                // /api/user/me 需要通过JWT认证，由JwtAuthenticationFilter处理
 
                 //允许管理员登录
                 .requestMatchers("/api/admin/login").permitAll()
-                // 其他API需要认证
-                .requestMatchers("/api/**").authenticated()
+                // 管理员API需要ADMIN角色
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                // 用户API需要USER角色或已认证
+                .requestMatchers("/api/user/**").authenticated()
                 .anyRequest().permitAll() // 其他非API请求允许访问
             )
             .csrf(csrf -> csrf.disable()) // 如果是API应用，通常禁用CSRF

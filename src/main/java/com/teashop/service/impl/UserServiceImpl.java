@@ -112,6 +112,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getCurrentUser(String token) throws ResourceNotFoundException {
+        // 验证token有效性
+        try {
+            String username = jwtUtil.extractUsername(token);
+            if (!jwtUtil.validateToken(token, username)) {
+                throw new BusinessException("认证已过期或无效");
+            }
+        } catch (Exception e) {
+            throw new BusinessException("认证失败");
+        }
+        
         // 从token中解析用户ID
         Long userId = jwtUtil.extractUserId(token);
         User user = userMapper.findById(userId);

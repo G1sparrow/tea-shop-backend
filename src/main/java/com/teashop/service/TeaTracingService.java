@@ -8,4 +8,5 @@ public interface TeaTracingService {
     TeaTracing createTracing(TeaTracing teaTracing);
     TeaTracing updateTracing(Long id, TeaTracing teaTracing);
     void deleteTracing(Long id);
+    TeaTracing save(TeaTracing teaTracing);
 }

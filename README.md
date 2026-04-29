@@ -6,7 +6,7 @@
 
 - **后端框架**: Spring Boot 2.7.0
 - **数据库**: MySQL 8.0
-- **持久层**: Spring Data JPA
+- **持久层**: Spring Mybatis
 - **安全框架**: Spring Security (BCrypt加密)
 - **API文档**: RESTful API
 - **构建工具**: Maven

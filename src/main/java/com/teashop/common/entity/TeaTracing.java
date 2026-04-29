@@ -37,21 +37,10 @@ public class TeaTracing {
     @Column(name = "tea_variety")
     private String teaVariety;
 
-    @Column(name = "quality_report")
-    private String qualityReport;
-
-    @Column(name = "tea_images", columnDefinition = "TEXT")
-    private String teaImages;
-
-    @Column(name = "growth_video")
-    private String growthVideo;
-
-    @Column(name = "qr_code")
-    private String qrCode;
-
     @CreationTimestamp
     private LocalDateTime createTime;
 
     @UpdateTimestamp
     private LocalDateTime updateTime;
+
 }

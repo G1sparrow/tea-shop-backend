@@ -130,6 +130,8 @@ public class AdminProductServiceImpl implements AdminProductService {
         existingProduct.setPrice(product.getPrice());
         existingProduct.setCategory(product.getCategory());
         existingProduct.setStatus(product.getStatus());
+        existingProduct.setStock(product.getStock());
+        existingProduct.setImageUrl(product.getImageUrl());
         
         int result = productMapper.update(existingProduct);
         if (result <= 0) {

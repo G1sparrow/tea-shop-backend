@@ -47,11 +47,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // 验证token
             if (jwtUtil.validateToken(token, username)) {
-                // 创建用户详情
+                // 需要从数据库获取用户信息来确定角色
+                // 由于当前架构中用户和管理员是分开的表，这里简化处理
+                // 实际项目中应该查询用户表来确定角色
+                String[] roles;
+                if (username.equals("admin")) {
+                    roles = new String[]{"ADMIN"};
+                } else {
+                    roles = new String[]{"USER"};
+                }
+                
                 UserDetails userDetails = User.builder()
                         .username(username)
                         .password("")
-                        .roles("ADMIN") // 可以根据实际情况设置角色
+                        .roles(roles)
                         .build();
 
                 // 创建认证令牌

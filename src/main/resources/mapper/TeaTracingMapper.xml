@@ -9,10 +9,6 @@
         <result column="harvest_time" property="harvestTime" />
         <result column="process" property="process" />
         <result column="tea_variety" property="teaVariety" />
-        <result column="quality_report" property="qualityReport" />
-        <result column="茶园_images" property="茶园Images" />
-        <result column="growth_video" property="growthVideo" />
-        <result column="qr_code" property="qrCode" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
@@ -27,11 +23,9 @@
 
     <insert id="insert" parameterType="com.teashop.common.entity.TeaTracing">
         INSERT INTO tea_tracing (
-            product_id, origin, harvest_time, process, tea_variety, 
-            quality_report, 茶园_images, growth_video, qr_code
+            product_id, origin, harvest_time, process, tea_variety
         ) VALUES (
-            #{product.id}, #{origin}, #{harvestTime}, #{process}, #{teaVariety}, 
-            #{qualityReport}, #{茶园Images}, #{growthVideo}, #{qrCode}
+            #{product.id}, #{origin}, #{harvestTime}, #{process}, #{teaVariety}
         )
     </insert>
 
@@ -41,10 +35,6 @@
             harvest_time = #{harvestTime},
             process = #{process},
             tea_variety = #{teaVariety},
-            quality_report = #{qualityReport},
-            茶园_images = #{茶园Images},
-            growth_video = #{growthVideo},
-            qr_code = #{qrCode},
             update_time = CURRENT_TIMESTAMP
         WHERE id = #{id}
     </update>

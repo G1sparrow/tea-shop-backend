@@ -8,4 +8,5 @@ public interface TeaTastingService {
     TeaTasting createTasting(TeaTasting teaTasting);
     TeaTasting updateTasting(Long id, TeaTasting teaTasting);
     void deleteTasting(Long id);
+    TeaTasting save(TeaTasting teaTasting);
 }

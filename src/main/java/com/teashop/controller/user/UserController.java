@@ -1,5 +1,6 @@
 package com.teashop.controller.user;
 
+import com.teashop.common.exception.BusinessException;
 import com.teashop.dto.request.LoginRequest;
 import com.teashop.dto.request.RegisterRequest;
 import com.teashop.dto.response.ApiResponse;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import com.teashop.common.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/user")
@@ -17,6 +19,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ApiResponse<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
@@ -48,8 +53,20 @@ public class UserController {
 
     @GetMapping("/me")
     public ApiResponse<UserResponse> getCurrentUser(@RequestHeader("Authorization") String authorization) {
-        // 从Authorization头中提取token
-        String token = authorization.substring(7); // 去掉"Bearer "前缀
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            throw new BusinessException("无效的认证信息");
+        }
+        String token = authorization.substring(7);
+        
+        try {
+            String username = jwtUtil.extractUsername(token);
+            if (!jwtUtil.validateToken(token, username)) {
+                throw new BusinessException("认证已过期或无效");
+            }
+        } catch (Exception e) {
+            throw new BusinessException("认证失败");
+        }
+        
         UserResponse response = userService.getCurrentUser(token);
         return ApiResponse.success(response);
     }

@@ -8,4 +8,5 @@ public interface BrewingGuideService {
     BrewingGuide createBrewingGuide(BrewingGuide brewingGuide);
     BrewingGuide updateBrewingGuide(Long id, BrewingGuide brewingGuide);
     void deleteBrewingGuide(Long id);
+    BrewingGuide save(BrewingGuide brewingGuide);
 }

@@ -49,12 +49,25 @@ public class AdminProductController {
     private ProductCategory mapStringToProductCategory(String categoryStr) {
         try {
             // 映射前端传入的分类字符串到枚举值
-            switch (categoryStr.toLowerCase()) {
-                case "green":
+            switch (categoryStr.toUpperCase()) {
+                case "GREEN_TEA":
                     return ProductCategory.GREEN_TEA;
-                case "oolong":
+                case "OOLONG_TEA":
                     return ProductCategory.OOLONG_TEA;
-                case "black":
+                case "BLACK_TEA":
+                    return ProductCategory.BLACK_TEA;
+                case "WHITE_TEA":
+                    return ProductCategory.WHITE_TEA;
+                case "PUERH_TEA":
+                    return ProductCategory.PUERH_TEA;
+                case "TEA_SET":
+                    return ProductCategory.TEA_SET;
+                // 保持向后兼容
+                case "GREEN":
+                    return ProductCategory.GREEN_TEA;
+                case "OOLONG":
+                    return ProductCategory.OOLONG_TEA;
+                case "BLACK":
                     return ProductCategory.BLACK_TEA;
                 default:
                     throw new IllegalArgumentException("无效的商品分类: " + categoryStr);
@@ -81,12 +94,28 @@ public class AdminProductController {
     
     @PostMapping
     public ApiResponse<ProductResponse> createProduct(@RequestBody com.teashop.common.entity.Product product) {
+        // 设置默认值
+        if (product.getStock() == null) {
+            product.setStock(0);
+        }
+        if (product.getStatus() == null) {
+            product.setStatus(true);
+        }
+        
         ProductResponse createdProduct = productService.createProduct(product);
         return ApiResponse.success(createdProduct);
     }
     
     @PutMapping("/{id}")
     public ApiResponse<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody com.teashop.common.entity.Product product) {
+        // 确保库存和状态字段被正确处理
+        if (product.getStock() == null) {
+            product.setStock(0);
+        }
+        if (product.getStatus() == null) {
+            product.setStatus(true);
+        }
+        
         ProductResponse updatedProduct = productService.updateProduct(id, product);
         return ApiResponse.success(updatedProduct);
     }

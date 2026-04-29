@@ -65,4 +65,27 @@ public class TeaTracingServiceImpl implements TeaTracingService {
             throw new RuntimeException("删除溯源信息失败");
         }
     }
+
+    @Override
+    public TeaTracing save(TeaTracing teaTracing) {
+        // 检查是否已存在该商品的溯源信息
+        Long productId = teaTracing.getProduct().getId();
+        TeaTracing existing = findByProductId(productId);
+        if (existing != null) {
+            // 更新现有记录
+            teaTracing.setId(existing.getId());
+            int result = teaTracingMapper.update(teaTracing);
+            if (result <= 0) {
+                throw new RuntimeException("更新溯源信息失败");
+            }
+            return teaTracing;
+        } else {
+            // 创建新记录
+            int result = teaTracingMapper.insert(teaTracing);
+            if (result <= 0) {
+                throw new RuntimeException("创建溯源信息失败");
+            }
+            return teaTracing;
+        }
+    }
 }

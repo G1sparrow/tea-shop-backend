@@ -65,4 +65,27 @@ public class BrewingGuideServiceImpl implements BrewingGuideService {
             throw new RuntimeException("删除冲泡指南失败");
         }
     }
+
+    @Override
+    public BrewingGuide save(BrewingGuide brewingGuide) {
+        // 检查是否已存在该商品的冲泡指南
+        Long productId = brewingGuide.getProduct().getId();
+        BrewingGuide existing = findByProductId(productId);
+        if (existing != null) {
+            // 更新现有记录
+            brewingGuide.setId(existing.getId());
+            int result = brewingGuideMapper.update(brewingGuide);
+            if (result <= 0) {
+                throw new RuntimeException("更新冲泡指南失败");
+            }
+            return brewingGuide;
+        } else {
+            // 创建新记录
+            int result = brewingGuideMapper.insert(brewingGuide);
+            if (result <= 0) {
+                throw new RuntimeException("创建冲泡指南失败");
+            }
+            return brewingGuide;
+        }
+    }
 }

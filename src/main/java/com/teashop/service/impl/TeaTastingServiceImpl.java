@@ -65,4 +65,27 @@ public class TeaTastingServiceImpl implements TeaTastingService {
             throw new RuntimeException("删除品鉴信息失败");
         }
     }
+
+    @Override
+    public TeaTasting save(TeaTasting teaTasting) {
+        // 检查是否已存在该商品的品鉴信息
+        Long productId = teaTasting.getProduct().getId();
+        TeaTasting existing = findByProductId(productId);
+        if (existing != null) {
+            // 更新现有记录
+            teaTasting.setId(existing.getId());
+            int result = teaTastingMapper.update(teaTasting);
+            if (result <= 0) {
+                throw new RuntimeException("更新品鉴信息失败");
+            }
+            return teaTasting;
+        } else {
+            // 创建新记录
+            int result = teaTastingMapper.insert(teaTasting);
+            if (result <= 0) {
+                throw new RuntimeException("创建品鉴信息失败");
+            }
+            return teaTasting;
+        }
+    }
 }
